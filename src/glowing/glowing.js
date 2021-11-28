@@ -1,10 +1,10 @@
 'use strict';
 /**
- * glowing.js version 1
+ * glowing.js version 1.1
  * Copyright (c) 2021 kumacat
  */
 
-const glowing_version = 1;
+const glowing_version = 1.1;
 console.log("%cGlowing.js 🌟 version " + glowing_version + " is running.", "padding:10px;border-left:20px orange solid;border-right:20px orange solid;border-top:6px orange solid;border-bottom:6px orange solid;background-color:#369;color:#fff;");
 
 class charObj {
@@ -610,6 +610,7 @@ class textObj extends imgObj {
         this.i.height = 0;
         this.iCanvasContext = this.i.getContext('2d');
         this.font = font;
+        this.size = 48;
         this.fillColor = (fillColor != null) ? fillColor : '#000';
         if (strokeColor != null || strokeWidth != null) {
             this.strokeColor = (strokeColor != null) ? strokeColor : '#000';
@@ -625,36 +626,36 @@ class textObj extends imgObj {
         this.i.height = 0;
         this.text = text;
         const textArray = this.text.split('\n');
+        this.iCanvasContext.textBaseline = 'top'
+        this.iCanvasContext.font = this.size + 'px ' + this.font;
+        let textWidth = 0;
+        let textHeight1 = 0;
         for (let n1 = 0; n1 < textArray.length; n1++) {
-            let displayWidth = 0;
-            textArray[n1].split('').forEach(element => {
-                if (this.font === 'fantasy') {
-                    const add = ((' !"#$%&' + "'" + '()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~、。，．・：；？！゛゜´｀¨＾…‘’“”±×÷≠∞♂♀°′″§○●□■▲▼→←↑↓∩∂∇≡√∫Å‰♯♪ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρστυφχψωАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя─│┌┐┘└├┬┤┴┼━┃┏┓┛┗┣┳┫┻╋┠┯┨┷┿┝┰┥┸╂｡｢｣､･ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝﾞﾟABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳№≒≡∫∮∑√⊥∠∟⊿∵∩').indexOf(element) === -1) ? 48 : 24;
-                    displayWidth += add;
-                } else {
-                    const add = ((' !"#$%&' + "'" + '()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~、。，．・：；？！゛゜´｀¨＾…‘’“”±×÷≠∞♂♀°′″§○●□■▲▼→←↑↓∩∂∇≡√∫Å‰♯♪ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρστυφχψωАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя─│┌┐┘└├┬┤┴┼━┃┏┓┛┗┣┳┫┻╋┠┯┨┷┿┝┰┥┸╂｡｢｣､･ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝﾞﾟABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳№≒≡∫∮∑√⊥∠∟⊿∵∩').indexOf(element) === -1) ? 54 : 26;
-                    displayWidth += add;
-                }
-            });
-            if (this.i.width < displayWidth) {
-                this.i.width = displayWidth;
+            const measure = this.iCanvasContext.measureText(textArray[n1]);
+            if (measure.width > textWidth) {
+                textWidth = measure.width;
             }
+            textHeight1 += measure.actualBoundingBoxDescent + this.size / 8;
         }
-        this.i.height = textArray.length * 58;
+        this.i.width = textWidth;
+        this.i.height = textHeight1;
+        console.log(textWidth, textHeight1);
         this.w = this.i.width;
         this.h = this.i.height;
-        this.iCanvasContext.font = '48px ' + this.font;
-        if (this.strokeColor !== false && this.strokeWidth !== false) {
-            this.iCanvasContext.lineWidth = this.strokeWidth
-            this.iCanvasContext.lineJoin = "miter";
-            this.iCanvasContext.strokeStyle = this.strokeColor;
-            for (let n1 = 0; n1 < textArray.length; n1++) {
-                this.iCanvasContext.strokeText(textArray[n1], 2, 48 + n1 * 44, this.i.width);
+        this.iCanvasContext.textBaseline = 'top'
+        this.iCanvasContext.font = this.size + 'px ' + this.font;
+        let textHeight2 = 0;
+        for (let n2 = 0; n2 < textArray.length; n2++) {
+            const measure = this.iCanvasContext.measureText(textArray[n2]);
+            if (this.strokeColor !== false && this.strokeWidth !== false) {
+                this.iCanvasContext.lineWidth = this.strokeWidth
+                this.iCanvasContext.lineJoin = "miter";
+                this.iCanvasContext.strokeStyle = this.strokeColor;
+                this.iCanvasContext.strokeText(textArray[n2], 0, textHeight2, this.i.width);
             }
-        }
-        this.iCanvasContext.fillStyle = this.fillColor;
-        for (let n1 = 0; n1 < textArray.length; n1++) {
-            this.iCanvasContext.fillText(textArray[n1], 2, 48 + n1 * 44, this.i.width);
+            this.iCanvasContext.fillStyle = this.fillColor;
+            this.iCanvasContext.fillText(textArray[n2], 0, textHeight2, this.i.width);
+            textHeight2 += measure.actualBoundingBoxDescent + this.size / 10;
         }
     }
     set changeFF(fontFamily) {
@@ -663,6 +664,10 @@ class textObj extends imgObj {
     }
     set changeFC(color) {
         this.fillColor = (color != null) ? color : this.fillColor;
+        this.setText(this.text);
+    }
+    set changeSZ(size) {
+        this.size = (size != null) ? size : this.size;
         this.setText(this.text);
     }
     set changeSC(color) {
