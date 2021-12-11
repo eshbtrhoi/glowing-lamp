@@ -1,6 +1,6 @@
 'use strict';
 /**
- * glowing.js version 1.1
+ * glowing.js version 1.2
  * Copyright (c) 2021 kumacat
  */
 
@@ -131,7 +131,7 @@ class imgObj {
         }
         this.smooth = true;
     }
-    sizecalc(calc, target) {
+    sizecalc(calc, target, thisobj) {
         function calc_string(str) {
             const spl1 = str.match(/[^ 　].*?/g);
             const calc1 = {
@@ -284,14 +284,14 @@ class imgObj {
             }
         }
 
-        if (calc.indexOf('calc') !== -1) {
+        if ((calc + '').indexOf('calc') !== -1) {
             const match1 = calc.match(/(?<=calc).*\)$/)[0];
-            return match_string(match1.match(/[^ 　].*?/g).join('').replace(/px/g, '').replace(/%(?=\D)(?!\()/g, '*' + target + '/100'));
+            return match_string(match1.match(/[^ 　].*?/g).join('').replace(/px/g, '').replace(/%(?=\D)(?!\()/g, '*' + target + '/100').replace(/@(?=\D)(?!\()/g, '*' + thisobj + '/100'));
         } else {
-            if (calc.indexOf('%') !== -1) {
+            if ((calc + '').indexOf('%') !== -1) {
                 return target / 100 * (calc.match(/.*(?=%)/)[0] - 0);
             }
-            if (calc.indexOf('px') !== -1) {
+            if ((calc + '').indexOf('px') !== -1) {
                 return calc.match(/.*(?=px)/)[0] - 0;
             }
         }
@@ -302,28 +302,44 @@ class imgObj {
                 arg.width = 10;
             }
         }
-        arg.canvasContext.globalAlpha = arg.alpha;
-        arg.canvasContext.mozImageSmoothingEnabled = this.smooth;
-        arg.canvasContext.webkitImageSmoothingEnabled = this.smooth;
-        arg.canvasContext.msImageSmoothingEnabled = this.smooth;
-        arg.canvasContext.imageSmoothingEnabled = this.smooth;
-        const x = (typeof arg.x === 'number') ? arg.canvasElement.width / 100 * arg.x : this.sizecalc(arg.x, arg.canvasElement.width);
-        const y = (typeof arg.y === 'number') ? arg.canvasElement.height / 100 * arg.y : this.sizecalc(arg.y, arg.canvasElement.height);
-        arg.canvasContext.translate(x, y);
-        arg.canvasContext.rotate(arg.angle * Math.PI / 180);
-        arg.canvasContext.translate(-x, -y);
-        if (arg.height === false) {
-            const w = (typeof arg.width === 'number') ? arg.canvasElement.width / 100 * arg.width : this.sizecalc(arg.width, arg.canvasElement.width);
-            const h = w / this.w * this.h;
-            arg.canvasContext.drawImage(this.i, this.sx, this.sy, this.w, this.h, x - w / 2, y - h / 2, w, h);
-        } else if (arg.width === false) {
-            const h = (typeof arg.height === 'number') ? arg.canvasElement.height / 100 * arg.height : this.sizecalc(arg.height, arg.canvasElement.height);
-            const w = h / this.h * this.w;
-            arg.canvasContext.drawImage(this.i, this.sx, this.sy, this.w, this.h, x - w / 2, y - h / 2, w, h);
+        if ((arg.width + '').indexOf('@') !== -1) {
+            if ((arg.height + '').indexOf('@') !== -1) {}
         } else {
-            const w = (typeof arg.width === 'number') ? arg.canvasElement.width / 100 * arg.width : this.sizecalc(arg.width, arg.canvasElement.width);
-            const h = (typeof arg.height === 'number') ? arg.canvasElement.height / 100 * arg.height : this.sizecalc(arg.height, arg.canvasElement.height);
-            arg.canvasContext.drawImage(this.i, this.sx, this.sy, this.w, this.h, x - w / 2, y - h / 2, w, h);
+            if ((arg.height + '').indexOf('@') !== -1) {} else {
+                arg.canvasContext.globalAlpha = arg.alpha;
+                arg.canvasContext.mozImageSmoothingEnabled = this.smooth;
+                arg.canvasContext.webkitImageSmoothingEnabled = this.smooth;
+                arg.canvasContext.msImageSmoothingEnabled = this.smooth;
+                arg.canvasContext.imageSmoothingEnabled = this.smooth;
+                if (arg.height === false) {
+                    const w = (typeof arg.width === 'number') ? arg.canvasElement.width / 100 * arg.width : this.sizecalc(arg.width, arg.canvasElement.width);
+                    const h = w / this.w * this.h;
+                    const x = (typeof arg.x === 'number') ? arg.canvasElement.width / 100 * arg.x : this.sizecalc(arg.x, arg.canvasElement.width, w);
+                    const y = (typeof arg.y === 'number') ? arg.canvasElement.height / 100 * arg.y : this.sizecalc(arg.y, arg.canvasElement.height, h);
+                    arg.canvasContext.translate(x, y);
+                    arg.canvasContext.rotate(arg.angle * Math.PI / 180);
+                    arg.canvasContext.translate(-x, -y);
+                    arg.canvasContext.drawImage(this.i, this.sx, this.sy, this.w, this.h, x - w / 2, y - h / 2, w, h);
+                } else if (arg.width === false) {
+                    const h = (typeof arg.height === 'number') ? arg.canvasElement.height / 100 * arg.height : this.sizecalc(arg.height, arg.canvasElement.height);
+                    const w = h / this.h * this.w;
+                    const x = (typeof arg.x === 'number') ? arg.canvasElement.width / 100 * arg.x : this.sizecalc(arg.x, arg.canvasElement.width, w);
+                    const y = (typeof arg.y === 'number') ? arg.canvasElement.height / 100 * arg.y : this.sizecalc(arg.y, arg.canvasElement.height, h);
+                    arg.canvasContext.translate(x, y);
+                    arg.canvasContext.rotate(arg.angle * Math.PI / 180);
+                    arg.canvasContext.translate(-x, -y);
+                    arg.canvasContext.drawImage(this.i, this.sx, this.sy, this.w, this.h, x - w / 2, y - h / 2, w, h);
+                } else {
+                    const w = (typeof arg.width === 'number') ? arg.canvasElement.width / 100 * arg.width : this.sizecalc(arg.width, arg.canvasElement.width);
+                    const h = (typeof arg.height === 'number') ? arg.canvasElement.height / 100 * arg.height : this.sizecalc(arg.height, arg.canvasElement.height);
+                    const x = (typeof arg.x === 'number') ? arg.canvasElement.width / 100 * arg.x : this.sizecalc(arg.x, arg.canvasElement.width, w);
+                    const y = (typeof arg.y === 'number') ? arg.canvasElement.height / 100 * arg.y : this.sizecalc(arg.y, arg.canvasElement.height, h);
+                    arg.canvasContext.translate(x, y);
+                    arg.canvasContext.rotate(arg.angle * Math.PI / 180);
+                    arg.canvasContext.translate(-x, -y);
+                    arg.canvasContext.drawImage(this.i, this.sx, this.sy, this.w, this.h, x - w / 2, y - h / 2, w, h);
+                }
+            }
         }
     }
     onPointer(x, y, w, h, arg) {
@@ -569,11 +585,13 @@ class stageObj extends charObj {
             }
         }
     }
-    pointCheck(n, x) {
+    pointCheck(n, pointX) {
+        const w = (this.stage[n].w !== false) ? ((typeof this.stage[n].w === 'number') ? this.canvasElement.width / 100 * this.stage[n].w : this.canvasdraw.sizecalc(this.stage[n].w, this.canvasElement.width)) : ((this.stage[n].h === false) ? this.canvasElement.width / 100 * 10 : false);
         if (this.stage[n].w !== false) {
-            const charStartWidth = this.canvasElement.width / 100 * (this.stage[n].x - this.stage[n].w / 2);
-            const charEndWidth = this.canvasElement.width / 100 * (this.stage[n].x + this.stage[n].w / 2);
-            if (charStartWidth < x && charEndWidth > x && this.stage[n].Run === true) {
+            const x = (typeof this.stage[n].x === 'number') ? this.canvasElement.width / 100 * this.stage[n].x : this.canvasdraw.sizecalc(this.stage[n].x, this.canvasElement.width, w);
+            const charStartX = x - w / 2;
+            const charEndX = x + w / 2;
+            if (charStartX < pointX && charEndX > pointX && this.stage[n].Run === true) {
                 return true;
             } else {
                 return false;
@@ -639,7 +657,6 @@ class textObj extends imgObj {
         }
         this.i.width = textWidth;
         this.i.height = textHeight1;
-        console.log(textWidth, textHeight1);
         this.w = this.i.width;
         this.h = this.i.height;
         this.iCanvasContext.textBaseline = 'top'
@@ -651,10 +668,10 @@ class textObj extends imgObj {
                 this.iCanvasContext.lineWidth = this.strokeWidth
                 this.iCanvasContext.lineJoin = "miter";
                 this.iCanvasContext.strokeStyle = this.strokeColor;
-                this.iCanvasContext.strokeText(textArray[n2], 0, textHeight2, this.i.width);
+                this.iCanvasContext.strokeText(textArray[n2], 0, textHeight2 + this.size / 14, this.i.width);
             }
             this.iCanvasContext.fillStyle = this.fillColor;
-            this.iCanvasContext.fillText(textArray[n2], 0, textHeight2, this.i.width);
+            this.iCanvasContext.fillText(textArray[n2], 0, textHeight2 + this.size / 14, this.i.width);
             textHeight2 += measure.actualBoundingBoxDescent + this.size / 10;
         }
     }
