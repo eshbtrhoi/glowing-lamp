@@ -1,7 +1,15 @@
 # glowing-lamp
 JavaScript canvas 2d
 
+## v1.3
+
+* `textObj`
+    * `strokeWidth`のデフォルト値を`6`に変更
+
+
 ## v1.2
+
+***注意: v1.2の`glowing_version`はv1.1に設定されています。バージョンを利用したプログラムの不具合を避けるためにv1.2の使用時は気を付けてください。***
 
 * `imgObj`(`charObj`)
     * `charObj`の`x`,`y`で`calc()`を使って計算するとき、`@`を入力して`%`と同じ記法でキャラクターの`width`,`height`に対する百分率計算の機能を追加  

@@ -1,10 +1,10 @@
 'use strict';
 /**
- * glowing.js version 1.2
+ * glowing.js version 1.3
  * Copyright (c) 2021 kumacat
  */
 
-const glowing_version = 1.1;
+const glowing_version = 1.3;
 console.log("%cGlowing.js 🌟 version " + glowing_version + " is running.", "padding:10px;border-left:20px orange solid;border-right:20px orange solid;border-top:6px orange solid;border-bottom:6px orange solid;background-color:#369;color:#fff;");
 
 class charObj {
@@ -632,7 +632,7 @@ class textObj extends imgObj {
         this.fillColor = (fillColor != null) ? fillColor : '#000';
         if (strokeColor != null || strokeWidth != null) {
             this.strokeColor = (strokeColor != null) ? strokeColor : '#000';
-            this.strokeWidth = (strokeWidth != null) ? strokeWidth : 4;
+            this.strokeWidth = (strokeWidth != null) ? strokeWidth : 6;
         } else {
             this.strokeColor = false;
             this.strokeWidth = false;
