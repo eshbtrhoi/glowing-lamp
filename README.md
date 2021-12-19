@@ -1,6 +1,16 @@
 # glowing-lamp
 JavaScript canvas 2d
 
+## v1.4
+
+* `charObj`
+    * `hide`で引数に`false`を設定した場合、`Run`の値を`false`に設定するよう修正
+* `imgObj`
+    * `sizecalc`の`calc()`に%,@を使用した計算と、かっこの計算の修正
+* `stageObj`
+    * `onPointer`に渡す引数の`sizecalc`を使用する場合に@の計算ができない問題の修正
+
+
 ## v1.3
 
 * `textObj`

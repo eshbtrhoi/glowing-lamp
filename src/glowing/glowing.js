@@ -1,10 +1,10 @@
 'use strict';
 /**
- * glowing.js version 1.3
+ * glowing.js version 1.4
  * Copyright (c) 2021 kumacat
  */
 
-const glowing_version = 1.3;
+const glowing_version = 1.4;
 console.log("%cGlowing.js 🌟 version " + glowing_version + " is running.", "padding:10px;border-left:20px orange solid;border-right:20px orange solid;border-top:6px orange solid;border-bottom:6px orange solid;background-color:#369;color:#fff;");
 
 class charObj {
@@ -69,7 +69,7 @@ class charObj {
             if (bool === true) {
                 this.Run = true;
             } else if (bool === false) {
-                this.Run = true;
+                this.Run = false;
             } else {
                 if (this.Run === true) {
                     this.Run = false;
@@ -270,9 +270,17 @@ class imgObj {
             return calc2.before - 0;
         }
 
+        function replace_percentage(num) {
+            return (num.replace('%', '') - 0) * target / 100;
+        }
+
+        function replace_thisobj(num) {
+            return (num.replace('@', '') - 0) * thisobj / 100;
+        }
+
         function match_string(str) {
-            const mat = str.match(/(?<=\().[^\(\)]*?(?=\))/g);
-            const spl = str.split(/\(.[^\(\)]*?\)/g);
+            const mat = str.match(/(?<=\()[^\(\)]*?(?=\))/g);
+            const spl = str.split(/\([^\(\)]*?\)/g);
             if (mat) {
                 const result = [spl[0]];
                 for (let n1 = 0; n1 < mat.length; n1++) {
@@ -286,7 +294,7 @@ class imgObj {
 
         if ((calc + '').indexOf('calc') !== -1) {
             const match1 = calc.match(/(?<=calc).*\)$/)[0];
-            return match_string(match1.match(/[^ 　].*?/g).join('').replace(/px/g, '').replace(/%(?=\D)(?!\()/g, '*' + target + '/100').replace(/@(?=\D)(?!\()/g, '*' + thisobj + '/100'));
+            return match_string(match1.match(/[^ 　].*?/g).join('').replace(/px/g, '').replace(/\d+%(?=\D)(?!\()/g, replace_percentage).replace(/\d+@(?=\D)(?!\()/g, replace_thisobj));
         } else {
             if ((calc + '').indexOf('%') !== -1) {
                 return target / 100 * (calc.match(/.*(?=%)/)[0] - 0);
@@ -487,7 +495,7 @@ class stageObj extends charObj {
                 if (this.pointCheck(n1, x)) {
                     let permission = false;
                     for (let n2 = 0; n2 < this.stage[n1].items.length; n2++) {
-                        permission = (permission === true) ? true : this.stage[n1].items[n2].onPointer(x - ((typeof this.stage[n1].x === 'number') ? this.canvasElement.width / 100 * this.stage[n1].x : this.canvasdraw.sizecalc(this.stage[n1].x, this.canvasElement.width)), y - ((typeof this.stage[n1].y === 'number') ? this.canvasElement.height / 100 * this.stage[n1].y : this.canvasdraw.sizecalc(this.stage[n1].y, this.canvasElement.height)), (this.stage[n1].w === false) ? false : (typeof this.stage[n1].w === 'number') ? this.canvasElement.width / 100 * this.stage[n1].w : this.canvasdraw.sizecalc(this.stage[n1].w, this.canvasElement.width), (this.stage[n1].h === false) ? false : (typeof this.stage[n1].h === 'number') ? this.canvasElement.height / 100 * this.stage[n1].h : this.canvasdraw.sizecalc(this.stage[n1].h, this.canvasElement.height), {
+                        permission = (permission === true) ? true : this.stage[n1].items[n2].onPointer(x - ((typeof this.stage[n1].x === 'number') ? this.canvasElement.width / 100 * this.stage[n1].x : this.canvasdraw.sizecalc(this.stage[n1].x, this.canvasElement.width, (this.stage[n1].w === false) ? false : (typeof this.stage[n1].w === 'number') ? this.canvasElement.width / 100 * this.stage[n1].w : this.canvasdraw.sizecalc(this.stage[n1].w, this.canvasElement.width))), y - ((typeof this.stage[n1].y === 'number') ? this.canvasElement.height / 100 * this.stage[n1].y : this.canvasdraw.sizecalc(this.stage[n1].y, this.canvasElement.height, (this.stage[n1].h === false) ? false : (typeof this.stage[n1].h === 'number') ? this.canvasElement.height / 100 * this.stage[n1].h : this.canvasdraw.sizecalc(this.stage[n1].h, this.canvasElement.height))), (this.stage[n1].w === false) ? false : (typeof this.stage[n1].w === 'number') ? this.canvasElement.width / 100 * this.stage[n1].w : this.canvasdraw.sizecalc(this.stage[n1].w, this.canvasElement.width), (this.stage[n1].h === false) ? false : (typeof this.stage[n1].h === 'number') ? this.canvasElement.height / 100 * this.stage[n1].h : this.canvasdraw.sizecalc(this.stage[n1].h, this.canvasElement.height), {
                             canvasElement: this.canvasElement,
                             canvasContext: this.canvasContext,
                             x: this.stage[n1].x,
@@ -543,7 +551,7 @@ class stageObj extends charObj {
                 if (this.pointCheck(n1, x)) {
                     let permission = false;
                     for (let n2 = 0; n2 < this.stage[n1].items.length; n2++) {
-                        permission = (permission === true) ? true : this.stage[n1].items[n2].onPointer(x - ((typeof this.stage[n1].x === 'number') ? this.canvasElement.width / 100 * this.stage[n1].x : this.canvasdraw.sizecalc(this.stage[n1].x, this.canvasElement.width)), y - ((typeof this.stage[n1].y === 'number') ? this.canvasElement.height / 100 * this.stage[n1].y : this.canvasdraw.sizecalc(this.stage[n1].y, this.canvasElement.height)), (this.stage[n1].w === false) ? false : (typeof this.stage[n1].w === 'number') ? this.canvasElement.width / 100 * this.stage[n1].w : this.canvasdraw.sizecalc(this.stage[n1].w, this.canvasElement.width), (this.stage[n1].h === false) ? false : (typeof this.stage[n1].h === 'number') ? this.canvasElement.height / 100 * this.stage[n1].h : this.canvasdraw.sizecalc(this.stage[n1].h, this.canvasElement.height), {
+                        permission = (permission === true) ? true : this.stage[n1].items[n2].onPointer(x - ((typeof this.stage[n1].x === 'number') ? this.canvasElement.width / 100 * this.stage[n1].x : this.canvasdraw.sizecalc(this.stage[n1].x, this.canvasElement.width, (this.stage[n1].w === false) ? false : (typeof this.stage[n1].w === 'number') ? this.canvasElement.width / 100 * this.stage[n1].w : this.canvasdraw.sizecalc(this.stage[n1].w, this.canvasElement.width))), y - ((typeof this.stage[n1].y === 'number') ? this.canvasElement.height / 100 * this.stage[n1].y : this.canvasdraw.sizecalc(this.stage[n1].y, this.canvasElement.height, (this.stage[n1].h === false) ? false : (typeof this.stage[n1].h === 'number') ? this.canvasElement.height / 100 * this.stage[n1].h : this.canvasdraw.sizecalc(this.stage[n1].h, this.canvasElement.height))), (this.stage[n1].w === false) ? false : (typeof this.stage[n1].w === 'number') ? this.canvasElement.width / 100 * this.stage[n1].w : this.canvasdraw.sizecalc(this.stage[n1].w, this.canvasElement.width), (this.stage[n1].h === false) ? false : (typeof this.stage[n1].h === 'number') ? this.canvasElement.height / 100 * this.stage[n1].h : this.canvasdraw.sizecalc(this.stage[n1].h, this.canvasElement.height), {
                             canvasElement: this.canvasElement,
                             canvasContext: this.canvasContext,
                             x: this.stage[n1].x,
