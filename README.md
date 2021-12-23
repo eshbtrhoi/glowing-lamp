@@ -1,6 +1,12 @@
 # glowing-lamp
 JavaScript canvas 2d
 
+## v1.5
+
+* `imgObj`
+    * onPointerの範囲を調整
+
+
 ## v1.4
 
 * `charObj`

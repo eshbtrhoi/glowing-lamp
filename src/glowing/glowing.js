@@ -1,10 +1,10 @@
 'use strict';
 /**
- * glowing.js version 1.4
+ * glowing.js version 1.5
  * Copyright (c) 2021 kumacat
  */
 
-const glowing_version = 1.4;
+const glowing_version = 1.5;
 console.log("%cGlowing.js 🌟 version " + glowing_version + " is running.", "padding:10px;border-left:20px orange solid;border-right:20px orange solid;border-top:6px orange solid;border-bottom:6px orange solid;background-color:#369;color:#fff;");
 
 class charObj {
@@ -356,8 +356,8 @@ class imgObj {
         const diagonal = Math.sqrt(this.w * this.w + this.h * this.h);
         eventCanvas.width = diagonal;
         eventCanvas.height = diagonal;
-        const pointX = (w === false) ? Math.floor(eventCanvas.width / 2 + this.h / h * x) : Math.floor(eventCanvas.width / 2 + this.w / w * x);
-        const pointY = (h === false) ? Math.floor(eventCanvas.height / 2 + this.w / w * y) : Math.floor(eventCanvas.height / 2 + this.h / h * y);
+        const pointX = (w === false) ? Math.round(eventCanvas.width / 2 + this.h / h * x) : Math.round(eventCanvas.width / 2 + this.w / w * x);
+        const pointY = (h === false) ? Math.round(eventCanvas.height / 2 + this.w / w * y) : Math.round(eventCanvas.height / 2 + this.h / h * y);
         eventContext.globalAlpha = arg.alpha;
         eventContext.mozImageSmoothingEnabled = this.smooth;
         eventContext.webkitImageSmoothingEnabled = this.smooth;
